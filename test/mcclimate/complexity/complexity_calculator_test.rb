@@ -45,4 +45,16 @@ class ComplexityCalculatorTest < Minitest::Test
 
     assert_equal 1, @calc.score(sexp)
   end
+
+  def test_conditional_score
+    sexp = parse("if (a = 1 + 1) == 2; end")
+
+    assert_equal 4, @calc.score(sexp)
+  end
+
+  def test_while_score
+    sexp = parse("while (a = 1 + 1) == 2; end")
+
+    assert_equal 4, @calc.score(sexp)
+  end
 end
