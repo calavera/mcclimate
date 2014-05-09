@@ -4,8 +4,29 @@ module McClimate
   #
   # This search also walks inside nested directories.
   class RepositoryWalker
+    def initialize
+      @parser    = MethodParser.new
+      @calculator = ComplexityCalculator.new
+    end
 
-    # Public: Walk over the entries in the directory given.
+    # Public: Calculate the score for a repository and keep the results in the reporter
+    #
+    # path: is the path to the git repository.
+    # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
+    #
+    # Returns nothing
+    def score(path, reporter)
+      walk(path) do |file_path|
+        @parser.walk(file_path) do |file, md|
+          score = @calculator.score(md.body)
+          reporter.report_score(file, md.name, score)
+        end
+      end
+    rescue MethodParser::Error => e
+      reporter.report_error(e)
+    end
+
+    # Internal: Walk over the entries in the directory given.
     #
     # path: is the path to a directory in the file system.
     # block: is the action to perform when we find a ruby file.

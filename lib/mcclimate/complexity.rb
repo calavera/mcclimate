@@ -9,6 +9,10 @@ module McClimate
   # McClimate::Complexity calculates the McClimate complexity score for a given ruby source tree.
   class Complexity
 
+    def initialize(reporter = Reporter::Basic.new)
+      @reporter = reporter
+    end
+
     # Public: Perform the calculation for a given repo.
     #
     # repo: is a directory path that points to a git repository.
@@ -16,6 +20,11 @@ module McClimate
     # Returns nothing.
     def run(repo)
       verify_repository(repo)
+
+      repo_walker = RepositoryWalker.new
+      repo_walker.score(repo, @reporter)
+
+      @reporter.notify
     end
 
     # Internal: Verify that the repository exists.
@@ -27,7 +36,7 @@ module McClimate
     def verify_repository(repo)
       valid = !repo.nil? && File.directory?(repo.strip)
 
-      raise McClimate::InvalidRepository.new(repo) unless valid
+      raise InvalidRepository.new(repo) unless valid
     end
   end
 end
