@@ -39,4 +39,10 @@ class ComplexityCalculatorTest < Minitest::Test
 
     assert_equal 11, @calc.score(sexp)
   end
+
+  def test_ignore_symbolized_operators
+    sexp = parse("a = :+")
+
+    assert_equal 1, @calc.score(sexp)
+  end
 end
