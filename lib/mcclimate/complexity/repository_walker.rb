@@ -36,10 +36,10 @@ module McClimate
       dir = Pathname(path)
       return unless dir.directory?
 
-      dir.each_child do |path|
-        walk(path, &block) if path.directory?
+      dir.each_child do |child|
+        walk(child, &block) if child.directory?
 
-        block.call(path) if ruby_source?(path.to_s)
+        block.call(child) if ruby_source?(child.to_s)
       end
     end
 
