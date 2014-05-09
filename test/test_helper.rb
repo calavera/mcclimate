@@ -9,5 +9,6 @@ require "fileutils"
 require "mcclimate"
 
 require "helpers/repository_helper"
+require "helpers/ruby_source_helper"
 
 require "minitest/autorun"
