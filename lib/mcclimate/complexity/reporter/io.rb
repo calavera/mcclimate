@@ -13,15 +13,15 @@ module McClimate
       # If the score is higher than 10, it prints a message "WARNING",
       # if the score is lower or equal to 10, it prints a message "INFO"
       def notify
-        errors.each do |error|
-          @io.puts "ERROR: #{error.message}"
-        end
-
         total.each do |file, method_hash|
           method_hash.each do |method, score|
             prefix = score > 10 ? "WARNING:" : "INFO:"
             @io.puts "#{prefix} #{method} in file #{file} has a complexity of #{score}"
           end
+        end
+
+        errors.each do |error|
+          @io.puts "ERROR: #{error.message}"
         end
       end
     end
