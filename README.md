@@ -32,3 +32,13 @@ Methods with score lower than 10 are not displayed, but they are still stored in
 
 `bin/complexity` caches its results inside temporal files. Those files store json data with the score for every method found.
 The cache is stored in the global temporal directory defined by your operating system, but it can be overrided setting the environment variable `MCCLIMATE_CACHE`.
+
+## Benchmarks
+
+The folder `bench` includes several benchmarks used to measure the performance of the complexity algorithm.
+
+Benchmarks can be executed like this:
+
+```
+$ bundle exec ruby bench/bench_self_score.rb
+```
