@@ -11,6 +11,11 @@ class MethodParserTest < Minitest::Test
     @parser = McClimate::MethodParser.new
   end
 
+  def parse_definition(source)
+    sexp = RubyParser.for_current_ruby.parse(source)
+    McClimate::MethodParser::MethodDefinition.new(sexp)
+  end
+
   def test_ignore_empty_sources
     source = new_ruby_source("#{new_tmp_repo}/source.rb", "")
 
@@ -36,5 +41,36 @@ class MethodParserTest < Minitest::Test
     assert_equal path, e.source
     assert e.message =~ /parse error on value "\$end/,
       "Expected message to include `parse error on value`, but was: #{e.message}"
+  end
+
+  def test_method_definition_body
+    source = "def foo; end"
+    md = parse_definition(source)
+
+    assert_equal RubyParser.for_current_ruby.parse(source), md.body
+  end
+
+  def test_method_definition_instance_name
+    md = parse_definition("def foo; end")
+
+    assert_equal "#foo", md.name
+  end
+
+  def test_method_definition_self_name
+    md = parse_definition("def self.foo; end")
+
+    assert_equal "self.foo", md.name
+  end
+
+  def test_method_definition_self_name
+    md = parse_definition("def Foo.foo; end")
+
+    assert_equal "Foo.foo", md.name
+  end
+
+  def test_method_definition_self_name
+    md = parse_definition("def var.foo; end")
+
+    assert_equal "var.foo", md.name
   end
 end
