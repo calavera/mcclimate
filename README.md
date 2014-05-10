@@ -6,6 +6,14 @@ McClimate complexity is an algorithm that measures the complexity of mathematica
 - For every use of the four main arithmatic operators (+, -, * and /), the algorithm adds 1 to the score.
 - For every literal number, the algorithm adds 1 to the score.
 
+## Installation
+
+McClimate uses Rugged to interact with git repositories. Unfortunately, there has not been any release in 10 months.
+Rugged's development branch has a lot of improvements that have not been released yet.
+
+The scripts in this repository use Bundler to make sure the Rugged and LibGit2 versions are correct.
+If you want to install McClimate as a gem, you'll need to make sure the versions for those two dependencies are properly installed.
+
 ## Usage
 
 ### Calculating complexity
