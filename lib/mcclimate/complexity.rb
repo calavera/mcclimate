@@ -61,13 +61,7 @@ module McClimate
         git_repo.checkout(sha, strategy: :force)
       end
 
-      # If this is a new repo, rugged returns nil for its refs size.
-      # Since it might still have sources, we assign a fake SHA.
-      if git_repo.refs.size == nil
-        "A" * 40
-      else
-        git_repo.last_commit
-      end
+      git_repo.last_commit.oid
     rescue Rugged::OSError, Rugged::RepositoryError => e
       raise InvalidRepository.new(repo, sha, e)
     end
