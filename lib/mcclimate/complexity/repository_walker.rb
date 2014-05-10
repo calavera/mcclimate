@@ -4,6 +4,8 @@ module McClimate
   #
   # This search also walks inside nested directories.
   class RepositoryWalker
+    BLACK_LIST = ["vendor"]
+
     def initialize(repo, sha)
       @repo       = Pathname(repo)
 
@@ -73,6 +75,8 @@ module McClimate
       return unless dir.directory?
 
       dir.each_child do |child|
+        next if black_listed?(child)
+
         walk(child, &block) if child.directory?
 
         block.call(child) if ruby_source?(child.to_s)
@@ -91,6 +95,17 @@ module McClimate
     # Returns false otherwise
     def ruby_source?(path)
       path =~ /\.rb\Z/
+    end
+
+    # Internal: Whether the directory needs to be ignored or not.
+    # There are certain directories that we don't want to analyze, like the vendor directory.
+    #
+    # child: the current element the walker is on.
+    #
+    # Returns true if the child needs to be ignored.
+    # Returns false otherwize
+    def black_listed?(child)
+      BLACK_LIST.include?(child.basename)
     end
   end
 end
