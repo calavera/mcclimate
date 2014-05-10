@@ -1,8 +1,10 @@
-LIBRARY  = File.expand_path('../lib', __dir__)
-
-$LOAD_PATH << LIBRARY  unless $LOAD_PATH.include?(LIBRARY)
-
+require "rubygems"
 require "benchmark"
+require "bundler/setup"
+
+library = File.expand_path('../lib', __dir__)
+$LOAD_PATH << library unless $LOAD_PATH.include?(library)
+
 require "mcclimate"
 
 def bench(repo, sha = nil)

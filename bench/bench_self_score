@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require_relative "bench_helper"
 
 mcclimate = File.expand_path("mcclimate", __dir__)

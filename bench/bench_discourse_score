@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require_relative "bench_helper"
 
 bench_open_source("discourse")
