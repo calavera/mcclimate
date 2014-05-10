@@ -10,7 +10,6 @@ class CacheTest < Minitest::Test
 
     block.call
   ensure
-    FileUtils.rm_rf(default_cache)
     ENV["MCCLIMATE_CACHE"] = prev
   end
 
