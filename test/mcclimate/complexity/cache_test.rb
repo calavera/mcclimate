@@ -32,7 +32,7 @@ class CacheTest < Minitest::Test
   def test_cache_initialization
     without_cache_env do
       loc = default_cache.join("foo", "bar")
-      cache = McClimate::Cache.new("foo", "bar")
+      McClimate::Cache.new("foo", "bar")
 
       assert loc.exist?, "Expected repo/sha cache to exist in #{loc.to_path}"
     end

@@ -8,6 +8,7 @@ require "fileutils"
 
 require "mcclimate"
 
+require "helpers/cache_helper"
 require "helpers/repository_helper"
 require "helpers/ruby_source_helper"
 
