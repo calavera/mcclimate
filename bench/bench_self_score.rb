@@ -1,12 +1,15 @@
-LIBRARY  = File.expand_path('../lib', __dir__)
+require_relative "bench_helper"
 
-$LOAD_PATH << LIBRARY  unless $LOAD_PATH.include?(LIBRARY)
+mcclimate = File.expand_path("mcclimate", __dir__)
+unless File.directory?(mcclimate)
+  require "fileutils"
 
-THIS_REPO = File.expand_path('..', __dir__)
+  FileUtils.mkdir_p mcclimate
 
-require "benchmark"
-require "mcclimate"
-
-Benchmark.bm do |x|
-  x.report { McClimate::Complexity.new.run(THIS_REPO) }
+  this_repo = Pathname(__dir__).join("..")
+  this_repo.each_child do |child|
+    FileUtils.cp_r child, mcclimate unless child.to_path =~ /bench$/
+  end
 end
+
+bench(mcclimate)
