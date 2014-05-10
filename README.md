@@ -41,6 +41,25 @@ Methods with score lower than 10 are not displayed, but they are still stored in
 `bin/complexity` caches its results inside temporal files. Those files store serialized data with the score for every method found.
 The cache is stored in the global temporal directory defined by your operating system, but it can be overrided setting the environment variable `MCCLIMATE_CACHE`.
 
+### Comparing results
+
+`bin/compare` can compare the results for two different shas for the same repository. This script takes three arguments, the repository path, to know which cache to
+use, the old sha and the new sha:
+
+```
+$ bin/compare path/repo old_sha new_sha
+```
+
+If you're like me, and never remember the SHAs that have been computed already, you can use the next script to see a list of SHAs in the cache.
+
+### Inspecting the cache
+
+`bin/inspect-cache` gives you a list of SHAs in the cache directory for a given repo. Each SHA has associated a number that's the count of the files inside:
+
+```
+$ bin/inspect-cache path/repo
+```
+
 ## Benchmarks
 
 The folder `bench` includes several benchmarks used to measure the performance of the complexity algorithm.
