@@ -11,4 +11,4 @@ if args != 3
 end
 
 cc = McClimate::Compare.new(McClimate::Reporter::ComparedResults.new)
-cc.run(ARGV[0], ARGV[1])
+cc.run(ARGV[0], ARGV[1], ARGV[2])
