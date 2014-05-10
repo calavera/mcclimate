@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "bundler/setup"
+
+require "mcclimate"
+
+args = ARGV.size
+
+if args < 1 && args > 2
+  puts "Usage: $0 repository_path sha"
+end
+
+cc = McClimate::Complexity.new(McClimate::Reporter::IO.new)
+cc.run(ARGV[0], ARGV[1])
