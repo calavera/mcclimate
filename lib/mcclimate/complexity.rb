@@ -28,7 +28,7 @@ module McClimate
 
       head = checkout_repository(repo, sha)
 
-      repo_walker = RepositoryWalker.new(repo, head)
+      repo_walker = AsyncRepositoryWalker.new(repo, head)
       repo_walker.score(@reporter)
 
       @reporter.notify
