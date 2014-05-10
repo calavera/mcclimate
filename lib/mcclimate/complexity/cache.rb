@@ -5,6 +5,8 @@ module McClimate
   # Use the environment variable `MCCLIMATE_CACHE` to change the destination of the cache.
   class Cache
     class Hit
+      attr_reader :file_path, :cached_score
+
       def initialize(file_path, cached_score)
         @file_path, @cached_score = file_path, cached_score
       end
@@ -31,6 +33,18 @@ module McClimate
       @disk_cache.mkpath
     end
 
+    # Public: Get every hit in the cache.
+    #
+    # block: is an action do to for each hit in the cache.
+    #
+    # Returns nothing.
+    def all(&block)
+      @disk_cache.each_child do |child|
+        file_path, method_cache = load_cache(child)
+        block.call(Hit.new(file_path, method_cache))
+      end
+    end
+
     # Public: Get the score for a source file from the cache.
     #
     # It hits the hot cache first to see if it loaded.
@@ -47,8 +61,8 @@ module McClimate
       disk_file = disk_cached_file(file_path)
 
       if disk_file.exist?
-        hit = load_cache(file_path, disk_file)
-        return Hit.new(file_path, hit)
+        _, method_cache = load_cache(disk_file)
+        return Hit.new(file_path, method_cache)
       end
     end
 
@@ -72,7 +86,7 @@ module McClimate
       @cache.each do |file_path, method_cache|
         disk_file = disk_cached_file(file_path)
 
-        ser_obj = Marshal.dump(method_cache)
+        ser_obj = Marshal.dump([file_path, method_cache])
 
         disk_file.open("w+") {|file| file.write(ser_obj)}
       end
@@ -90,11 +104,12 @@ module McClimate
     # Internal: Deserialize the cached score from a cached file.
     #
     # file_path: is the path to a file in the repository.
-    # disk_file: is the pathname to the cached file.
     #
-    # Returns the hash deserialized.
-    def load_cache(file_path, disk_file)
-      @cache[file_path] = Marshal.load(disk_file.read)
+    # Returns the array deserialized.
+    def load_cache(disk_file)
+      new_obj = Marshal.load(disk_file.read)
+      @cache[new_obj[0]] = new_obj[1]
+      new_obj
     end
 
     # Public: Tells where the cache is stored.

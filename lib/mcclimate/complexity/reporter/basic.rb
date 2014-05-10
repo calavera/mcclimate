@@ -31,14 +31,6 @@ module McClimate
       def report_error(error)
         @errors << error
       end
-
-      # Public: Notify the total result.
-      # Other reporters can override this method to add more complexity.
-      #
-      # Returns the report.
-      def notify
-        @total
-      end
     end
   end
 end

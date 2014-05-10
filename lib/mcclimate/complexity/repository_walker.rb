@@ -83,7 +83,7 @@ module McClimate
     def walk_child(child, reporter)
       walk(child, reporter) if child.directory?
 
-      calculate_child_score(child, reporter) if ruby_source?(child.to_s)
+      calculate_child_score(child, reporter) if ruby_source?(child)
     end
 
     def calculate_child_score(child, reporter)
@@ -103,7 +103,7 @@ module McClimate
     # Returns true if the path matches a ruby file.
     # Returns false otherwise
     def ruby_source?(path)
-      path =~ /\.rb\Z/
+      path.to_s =~ /\.rb\Z/
     end
 
     # Internal: Whether the directory needs to be ignored or not.
@@ -114,7 +114,7 @@ module McClimate
     # Returns true if the child needs to be ignored.
     # Returns false otherwize
     def black_listed?(child)
-      BLACK_LIST.include?(child.basename)
+      BLACK_LIST.include?(child.basename.to_s)
     end
   end
 

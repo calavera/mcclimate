@@ -20,10 +20,4 @@ class ComplexityTest < Minitest::Test
       @complexity.run("foo/bar/baz")
     end
   end
-
-  def test_runs_with_valid_repository
-    @complexity.run(create_empty_git_repo)
-  rescue McClimate::InvalidRepository
-    refute true, "Unexpected repository validation"
-  end
 end

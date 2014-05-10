@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "bundler/setup"
+
+require "mcclimate"
+
+if ARGV.size != 1
+  abort "Usage: #{$0} repository_path"
+end
+
+repo = Pathname(ARGV[0])
+
+cache = McClimate::Cache.new(repo.basename, "")
+path  = cache.location.join(repo.basename)
+
+puts "-> Cached SHAs for #{repo.basename}"
+
+path.each_child do |c|
+  puts "---> #{c.basename}: #{c.entries.size} hits in cache"
+end

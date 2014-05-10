@@ -10,7 +10,6 @@ class CacheTest < Minitest::Test
 
     block.call
   ensure
-    FileUtils.rm_rf(default_cache)
     ENV["MCCLIMATE_CACHE"] = prev
   end
 
@@ -33,7 +32,7 @@ class CacheTest < Minitest::Test
   def test_cache_initialization
     without_cache_env do
       loc = default_cache.join("foo", "bar")
-      cache = McClimate::Cache.new("foo", "bar")
+      McClimate::Cache.new("foo", "bar")
 
       assert loc.exist?, "Expected repo/sha cache to exist in #{loc.to_path}"
     end
@@ -86,6 +85,22 @@ class CacheTest < Minitest::Test
       hit.each do |file_name, method_name, score|
         assert_equal 3, score
         assert_equal "method", method_name
+      end
+    end
+  end
+
+  def test_get_all_cached_scores
+    without_cache_env do
+      cache = McClimate::Cache.new("foo", "bar")
+      cache.put("file_name", "method", 3)
+      cache.flush
+
+      cache2 = McClimate::Cache.new("foo", "bar")
+      cache2.all do |hit|
+        hit.each do |file_name, method_name, score|
+          assert_equal 3, score
+          assert_equal "method", method_name
+        end
       end
     end
   end

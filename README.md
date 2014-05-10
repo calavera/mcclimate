@@ -44,9 +44,10 @@ The cache is stored in the global temporal directory defined by your operating s
 ## Benchmarks
 
 The folder `bench` includes several benchmarks used to measure the performance of the complexity algorithm.
+These benchmarks don't produce any output, they use the basic reporter that doesn't print to stdout.
 
-Benchmarks can be executed like this:
+Eeach benchmark is a self executed script, that you can run like this:
 
 ```
-$ bundle exec ruby bench/bench_self_score.rb
+$ bench/bench_self_score
 ```
