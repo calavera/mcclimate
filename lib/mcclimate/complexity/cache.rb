@@ -24,8 +24,6 @@ module McClimate
       end
     end
 
-    attr_reader :disk_cache
-
     def initialize(repo, sha)
       @repo, @sha = repo, sha
 
