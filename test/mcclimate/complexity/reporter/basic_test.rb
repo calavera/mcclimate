@@ -9,7 +9,7 @@ class BasicReporterTest < Minitest::Test
     @reporter.report_score("foo", "bar", 3)
 
     result = {"foo" => {"bar" => 3}}
-    assert_equal result, @reporter.notify
+    assert_equal result, @reporter.total
   end
 
   def test_keep_errors

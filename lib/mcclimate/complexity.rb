@@ -30,8 +30,6 @@ module McClimate
 
       repo_walker = RepositoryWalker.new(repo, head)
       repo_walker.score(@reporter)
-
-      @reporter.notify
     end
 
     # Internal: Verify that the repository exists.
