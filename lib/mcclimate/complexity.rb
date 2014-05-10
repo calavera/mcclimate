@@ -44,7 +44,7 @@ module McClimate
       raise InvalidRepository.new(repo) unless valid
     end
 
-    # Internal: Read the current SHA for the repository.
+    # Public: Read the current SHA for the repository.
     # It checks out a specific SHA if it exists.
     #
     # sha: is the git SHA to checkout.
