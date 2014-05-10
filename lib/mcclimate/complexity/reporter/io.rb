@@ -17,7 +17,7 @@ module McClimate
       # if the score is lower or equal to 10, it prints a message "INFO"
       def report_score(file_path, method_name, score)
         prefix = score > 10 ? "WARNING:" : "INFO:"
-        @io.puts "#{prefix} #{method_name} in file #{file_path} has a complexity of #{score}"
+        @io.puts "#{prefix} '#{method_name}' in file #{file_path} has a complexity of #{score}"
       end
 
       # Public: Adds the error to the accumulator.

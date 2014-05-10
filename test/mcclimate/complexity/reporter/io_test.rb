@@ -1,8 +1,6 @@
 require "test_helper"
 
 class IOReporterTest < Minitest::Test
-  require 'stringio'
-
   def setup
     @io = StringIO.new
     @reporter = McClimate::Reporter::IO.new(@io)
@@ -14,9 +12,9 @@ class IOReporterTest < Minitest::Test
     @reporter.report_score(Pathname("bar"), "#baz", 20)
 
     lines = @io.string.split("\n")
-    assert_includes lines, "INFO: #bar in file foo has a complexity of 3"
-    assert_includes lines, "INFO: #baz in file foo has a complexity of 1"
-    assert_includes lines, "WARNING: #baz in file bar has a complexity of 20"
+    assert_includes lines, "INFO: '#bar' in file foo has a complexity of 3"
+    assert_includes lines, "INFO: '#baz' in file foo has a complexity of 1"
+    assert_includes lines, "WARNING: '#baz' in file bar has a complexity of 20"
   end
 
   def test_notify_errors

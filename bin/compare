@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "bundler/setup"
+
+require "mcclimate"
+
+args = ARGV.size
+
+if args != 3
+  abort "Usage: #{$0} repository_path old_sha new_sha"
+end
+
+cc = McClimate::Compare.new(McClimate::Reporter::ComparedResults.new)
+cc.run(ARGV[0], ARGV[1])

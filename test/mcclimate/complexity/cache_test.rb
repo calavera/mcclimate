@@ -89,4 +89,20 @@ class CacheTest < Minitest::Test
       end
     end
   end
+
+  def test_get_all_cached_scores
+    without_cache_env do
+      cache = McClimate::Cache.new("foo", "bar")
+      cache.put("file_name", "method", 3)
+      cache.flush
+
+      cache2 = McClimate::Cache.new("foo", "bar")
+      cache2.all do |hit|
+        hit.each do |file_name, method_name, score|
+          assert_equal 3, score
+          assert_equal "method", method_name
+        end
+      end
+    end
+  end
 end
