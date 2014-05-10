@@ -34,7 +34,7 @@ $ bin/complexity path/to/git/repo SHA
 #### Displaying Results
 
 `bin/complexity` shows you a warning message for every method with complexity higher than 10.
-Methods with score lower than 10 are not displayed, but they are still stored in the [cache](#Caching results) for future references.
+Methods with score lower than 10 are not displayed, but they are still stored in the [cache](#caching-results) for future references.
 
 ### Caching results
 
