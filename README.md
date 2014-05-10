@@ -30,7 +30,7 @@ Methods with score lower than 10 are not displayed, but they are still stored in
 
 ### Caching results
 
-`bin/complexity` caches its results inside temporal files. Those files store json data with the score for every method found.
+`bin/complexity` caches its results inside temporal files. Those files store serialized data with the score for every method found.
 The cache is stored in the global temporal directory defined by your operating system, but it can be overrided setting the environment variable `MCCLIMATE_CACHE`.
 
 ## Benchmarks

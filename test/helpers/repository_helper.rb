@@ -13,6 +13,12 @@ module Test
       end
     end
 
+    def create_empty_git_repo
+      new_tmp_repo do |dir|
+        Rugged::Repository.init_at(dir)
+      end
+    end
+
     def new_tmp_repo
       dir = Dir.mktmpdir
       yield(dir) if block_given?

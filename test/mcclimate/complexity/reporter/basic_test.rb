@@ -6,7 +6,7 @@ class BasicReporterTest < Minitest::Test
   end
 
   def test_keep_scores
-    @reporter.report_score(Pathname("foo"), "bar", 3)
+    @reporter.report_score("foo", "bar", 3)
 
     result = {"foo" => {"bar" => 3}}
     assert_equal result, @reporter.notify

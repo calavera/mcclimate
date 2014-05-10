@@ -4,29 +4,65 @@ module McClimate
   #
   # This search also walks inside nested directories.
   class RepositoryWalker
-    def initialize
-      @parser    = MethodParser.new
+    def initialize(repo, sha)
+      @repo       = Pathname(repo)
+
+      @cache      = Cache.new(@repo.basename, sha)
+      @parser     = MethodParser.new
       @calculator = ComplexityCalculator.new
     end
 
     # Public: Calculate the score for a repository and keep the results in the reporter
     #
-    # path: is the path to the git repository.
     # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
     #
     # Returns nothing
-    def score(path, reporter)
-      walk(path) do |file_path|
-        @parser.walk(file_path) do |file, md|
-          score = @calculator.score(md.body)
-          reporter.report_score(file, md.name, score)
+    def score(reporter)
+      walk(@repo) do |file_path|
+        if !score_from_cache(file_path, reporter)
+          calculate_score(file_path, reporter)
         end
+      end
+    ensure
+      @cache.flush
+    end
+
+    # Public: Calculates the score for a file without hitting the cache.
+    #
+    # file_path: is the path to the file
+    # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
+    #
+    # Returns nothing.
+    def calculate_score(file_path, reporter)
+      @parser.walk(file_path) do |file, md|
+        score = @calculator.score(md.body)
+        @cache.put(file_path.to_path, md.name, score)
+
+        reporter.report_score(file.to_path, md.name, score)
       end
     rescue MethodParser::Error => e
       reporter.report_error(e)
     end
 
-    # Internal: Walk over the entries in the directory given.
+    # Internal: Check the cache to see if the score is available there.
+    #
+    # file_path: is the path to the file
+    # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
+    #
+    # Returns false if there is no cached score.
+    # Returns true if there is cached score
+    def score_from_cache(file_path, reporter)
+      cached_score = @cache.get(file_path.to_path)
+      return false unless cached_score
+
+      cached_score.each do |file, method_name, score|
+        reporter.report_score(file, method_name, score)
+      end
+
+      true
+    end
+
+    # Internal: Walks over the entries in the directory given.
     #
     # path: is the path to a directory in the file system.
     # block: is the action to perform when we find a ruby file.

@@ -6,24 +6,28 @@ class RepositoryWalkerTest < Minitest::Test
   def setup
     @counter = 0
     @process = Proc.new {|path| @counter += 1}
-
-    @walker = McClimate::RepositoryWalker.new
   end
 
   def test_ignore_empty_paths
-    @walker.walk(new_tmp_repo, &@process)
+    repo   = new_tmp_repo
+    walker = McClimate::RepositoryWalker.new(repo, "foo")
+    walker.walk(repo, &@process)
 
     assert_equal 0, @counter
   end
 
   def test_process_common_ruby_files
-    @walker.walk(create_simple_repo, &@process)
+    repo   = create_simple_repo
+    walker = McClimate::RepositoryWalker.new(repo, "foo")
+    walker.walk(repo, &@process)
 
     assert_equal 1, @counter
   end
 
   def test_process_deep_ruby_files
-    @walker.walk(create_deep_repo, &@process)
+    repo   = create_deep_repo
+    walker = McClimate::RepositoryWalker.new(repo, "foo")
+    walker.walk(repo, &@process)
 
     assert_equal 1, @counter
   end

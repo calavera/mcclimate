@@ -12,14 +12,14 @@ module McClimate
 
       # Public: Adds the score for a given file and method to the report.
       #
-      # file: is the path to the source file.
+      # file_path: is the path to the source file.
       # method_name: is the name for the method.
       # score: is the complexity score.
       #
       # Returns nothing
-      def report_score(file, method_name, score)
-        @total[file.to_path] ||= {}
-        @total[file.to_path][method_name] = score
+      def report_score(file_path, method_name, score)
+        @total[file_path] ||= {}
+        @total[file_path][method_name] = score
       end
 
       # Public: Adds the error to the accumulator.
