@@ -70,3 +70,5 @@ Eeach benchmark is a self executed script, that you can run like this:
 ```
 $ bench/bench_self_score
 ```
+
+## License
