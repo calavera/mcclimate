@@ -127,4 +127,19 @@ module McClimate
       end
     end
   end
+
+  # SynchronizedCache is an specialization from cache that synchronizes writes in the cache.
+  # This cache is used by the AsyncRepositoryWalker to avoid overriding the file cache.
+  class SynchronizedCache < Cache
+
+    def initialize
+      super
+
+      @semaphore = Mutex.new
+    end
+
+    def put(file_path, method_name, score)
+      @semaphore.synchronize { super }
+    end
+  end
 end

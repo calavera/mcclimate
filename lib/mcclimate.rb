@@ -1,6 +1,7 @@
 require "tmpdir"
 require "rugged"
 require "pathname"
+require "celluloid"
 require "digest/md5"
 require "ruby_parser"
 

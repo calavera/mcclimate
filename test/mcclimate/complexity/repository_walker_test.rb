@@ -4,26 +4,45 @@ class RepositoryWalkerTest < Minitest::Test
   include Test::RepositoryHelper
   include Test::CacheHelper
 
-  def setup
-    @counter = 0
-    @process = Proc.new {|path| @counter += 1}
+  class MockRepositoryWalker < McClimate::RepositoryWalker
+    attr_reader :counter
+    def initialize(repo, sha)
+      super
+      @counter = 0
+    end
 
-    @repo   = create_simple_repo
-    @simple_walker = McClimate::RepositoryWalker.new(@repo, "foo")
+    def calculate_child_score(child, reporter)
+      @counter += 1
+    end
+  end
+
+  def setup
+    @reporter = McClimate::Reporter::Basic.new
+    @simple_walker = McClimate::RepositoryWalker.new(new_tmp_repo, "foo")
+  end
+
+  def test_ignore_empty_paths
+    repo   = new_tmp_repo
+    walker = MockRepositoryWalker.new(repo, "foo")
+    walker.score(@reporter)
+
+    assert_equal 0, walker.counter
   end
 
   def test_process_common_ruby_files
-    @simple_walker.walk(@repo, &@process)
+    repo   = create_simple_repo
+    walker = MockRepositoryWalker.new(repo, "foo")
+    walker.score(@reporter)
 
-    assert_equal 1, @counter
+    assert_equal 1, walker.counter
   end
 
   def test_process_deep_ruby_files
     repo   = create_deep_repo
-    walker = McClimate::RepositoryWalker.new(repo, "foo")
-    walker.walk(repo, &@process)
+    walker = MockRepositoryWalker.new(repo, "foo")
+    walker.score(@reporter)
 
-    assert_equal 1, @counter
+    assert_equal 1, walker.counter
   end
 
   def test_blacklist_vendor_dir
@@ -53,11 +72,12 @@ class RepositoryWalkerTest < Minitest::Test
 
   def test_score_from_cache_hit
     with_cache_env do
-      path = Pathname(@repo)
+      repo  = new_tmp_repo
+      path = Pathname(repo)
       put_cache(path.basename, "foo", "foo.rb", "#bar", 3)
 
       reporter = McClimate::Reporter::Basic.new
-      walker   = McClimate::RepositoryWalker.new(@repo, "foo")
+      walker   = McClimate::RepositoryWalker.new(repo, "foo")
 
       assert walker.score_from_cache(Pathname("foo.rb"), reporter),
         "Expected to get the score from the cache"

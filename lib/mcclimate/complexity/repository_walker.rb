@@ -20,11 +20,7 @@ module McClimate
     #
     # Returns nothing
     def score(reporter)
-      walk(@repo) do |file_path|
-        if !score_from_cache(file_path, reporter)
-          calculate_score(file_path, reporter)
-        end
-      end
+      walk(@repo, reporter)
     ensure
       @cache.flush
     end
@@ -66,19 +62,33 @@ module McClimate
 
     # Internal: Walks over the entries in the directory given.
     #
-    # path: is the path to a directory in the file system.
-    # block: is the action to perform when we find a ruby file.
+    # dir: is the path to a directory in the file system.
+    # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
     #
     # Returns nothing.
-    def walk(path, &block)
-      dir = Pathname(path)
-      return unless dir.directory?
-
+    def walk(dir, reporter)
       dir.each_child do |child|
         next if black_listed?(child)
 
-        walk(child, &block) if child.directory?
-        block.call(child)   if ruby_source?(child)
+        walk_child(child, reporter)
+      end
+    end
+
+    # Internal: Perform an operation with the directory child
+    #
+    # child: is the current child we're walking.
+    # reporter: is a structure where we keep the results for the repo and we use to notify after the process.
+    #
+    # Returns nothing.
+    def walk_child(child, reporter)
+      walk(child, reporter) if child.directory?
+
+      calculate_child_score(child, reporter) if ruby_source?(child)
+    end
+
+    def calculate_child_score(child, reporter)
+      if !score_from_cache(child, reporter)
+        calculate_score(child, reporter)
       end
     end
 
@@ -105,6 +115,25 @@ module McClimate
     # Returns false otherwize
     def black_listed?(child)
       BLACK_LIST.include?(child.basename.to_s)
+    end
+  end
+
+  # AsyncRepositoryWalker is an specialization of RepositoryWalker
+  # that uses Celluloid::Future to perform the score calculation for each file.
+  class AsyncRepositoryWalker < RepositoryWalker
+    include Celluloid
+
+    # Internal: Overrides RepositoryWalker#walk to keep the list of futures.
+    def walk(dir, reporter)
+      futures = []
+
+      dir.each_child do |child|
+        next if black_listed?(child)
+
+        futures << future.walk_child(child, reporter)
+      end
+
+      futures.each {|f| f.value}
     end
   end
 end
