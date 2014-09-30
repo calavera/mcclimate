@@ -48,6 +48,94 @@ module McClimate
         end
       end
 
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
+      sexp.each_of_type(:lasgn) do |asgn|
+        asgn.deep_each do |elem|
+          score += 1 if literal?(elem)
+
+          symbol_cache.inc(elem)
+          count_call_operators(elem, symbol_cache)
+        end
+      end
       score += symbol_cache.count_operators
 
       score
