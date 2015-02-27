@@ -72,3 +72,5 @@ $ bench/bench_self_score
 ```
 
 ## License
+
+MIT
